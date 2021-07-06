@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import bgImg from "./img/motion_background.png";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "styles/theme";
 import AddBtn from "components/header/AddBtn";
+import VideoCard from "components/section/card/VideoCard";
+import ImageCard from "components/section/card/ImageCard";
+import NoteCard from "components/section/card/NoteCard";
+
+type Card = {
+  type: string;
+  title: string;
+  body: string;
+};
 
 const AppBG = styled.div`
   position: absolute;
@@ -11,6 +20,12 @@ const AppBG = styled.div`
   height: 100vh;
   background-image: url(${bgImg});
   background-size: cover;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 `;
 
 const Header = styled.header`
@@ -33,9 +48,29 @@ const Btns = styled.div`
 `;
 
 const Section = styled.section`
+  flex: 1;
   width: 768px;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.3);
+  margin: 0 auto;
+  overflow: auto;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+const Footer = styled.footer`
+  /* position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%); */
+
+  background-color: rgba(0, 0, 0, 1);
+  color: white;
+  padding: 12px;
+  text-align: center;
+  width: 768px;
   margin: 0 auto;
 
   @media screen and (max-width: 768px) {
@@ -44,19 +79,66 @@ const Section = styled.section`
 `;
 
 function App() {
+  const [card, setCard] = useState<Card[]>([
+    { type: "note", title: "test1", body: "test" },
+    { type: "task", title: "test1", body: "test" },
+    {
+      type: "video",
+      title: "test2",
+      body: "https://www.youtube.com/embed/28-1zR6Xaek",
+    },
+    {
+      type: "image",
+      title: "IMAGE",
+      body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
+    },
+    {
+      type: "image",
+      title: "IMAGE",
+      body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
+    },
+  ]);
+
   return (
     <ThemeProvider theme={theme}>
       <AppBG>
-        <Header>
-          <h1>MOTION</h1>
-          <Btns>
-            <AddBtn name="IMAGE" />
-            <AddBtn name="VIDEO" />
-            <AddBtn name="NOTE" />
-            <AddBtn name="TASK" />
-          </Btns>
-        </Header>
-        <Section></Section>
+        <Container>
+          <Header>
+            <h1>MOTION</h1>
+            <Btns>
+              <AddBtn name="IMAGE" />
+              <AddBtn name="VIDEO" />
+              <AddBtn name="NOTE" />
+              <AddBtn name="TASK" />
+            </Btns>
+          </Header>
+          <Section>
+            {card.map((value, index) =>
+              value.type === "video" ? (
+                <VideoCard
+                  title={value.title}
+                  url={value.body}
+                  key={index}
+                ></VideoCard>
+              ) : value.type === "image" ? (
+                <ImageCard
+                  title={value.title}
+                  url={value.body}
+                  key={index}
+                ></ImageCard>
+              ) : value.type === "note" ? (
+                <NoteCard
+                  title={value.title}
+                  body={value.body}
+                  key={index}
+                ></NoteCard>
+              ) : (
+                <div>{value.body}</div>
+              )
+            )}
+          </Section>
+          <Footer>Welcome to Motion!</Footer>
+        </Container>
       </AppBG>
     </ThemeProvider>
   );
