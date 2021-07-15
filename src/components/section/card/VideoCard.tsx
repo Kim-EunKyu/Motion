@@ -2,8 +2,11 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { removeCard } from "store/modules/card";
+import { useDispatch } from "react-redux";
 
 type Video = {
+  no: number;
   title: string;
   url: string;
 };
@@ -46,7 +49,12 @@ const Title = styled.div`
   padding: 8px 6px;
 `;
 
-const VideoCard: React.FC<Video> = ({ title, url }) => {
+const VideoCard: React.FC<Video> = ({ no, title, url }) => {
+  const dispatch = useDispatch();
+  const onClickRemoveCard = () => {
+    dispatch(removeCard(no));
+  };
+
   return (
     <VideoCardBlock>
       <Body>
@@ -54,7 +62,7 @@ const VideoCard: React.FC<Video> = ({ title, url }) => {
         <Title>{title}</Title>
       </Body>
       <Right>
-        <RemoveBtn>
+        <RemoveBtn onClick={onClickRemoveCard}>
           <FontAwesomeIcon icon={faTimes} />
         </RemoveBtn>
       </Right>
@@ -62,4 +70,4 @@ const VideoCard: React.FC<Video> = ({ title, url }) => {
   );
 };
 
-export default VideoCard;
+export default React.memo(VideoCard);

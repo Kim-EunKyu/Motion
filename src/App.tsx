@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./App.css";
 import bgImg from "./img/motion_background.png";
 import styled, { ThemeProvider } from "styled-components";
@@ -7,12 +7,9 @@ import AddBtn from "components/header/AddBtn";
 import VideoCard from "components/section/card/VideoCard";
 import ImageCard from "components/section/card/ImageCard";
 import NoteCard from "components/section/card/NoteCard";
-
-type Card = {
-  type: string;
-  title: string;
-  body: string;
-};
+import TaskCard from "components/section/card/TaskCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/modules";
 
 const AppBG = styled.div`
   position: absolute;
@@ -61,11 +58,6 @@ const Section = styled.section`
 `;
 
 const Footer = styled.footer`
-  /* position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%); */
-
   background-color: rgba(0, 0, 0, 1);
   color: white;
   padding: 12px;
@@ -79,25 +71,28 @@ const Footer = styled.footer`
 `;
 
 function App() {
-  const [card, setCard] = useState<Card[]>([
-    { type: "note", title: "test1", body: "test" },
-    { type: "task", title: "test1", body: "test" },
-    {
-      type: "video",
-      title: "test2",
-      body: "https://www.youtube.com/embed/28-1zR6Xaek",
-    },
-    {
-      type: "image",
-      title: "IMAGE",
-      body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
-    },
-    {
-      type: "image",
-      title: "IMAGE",
-      body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
-    },
-  ]);
+  // const [card, setCard] = useState<Card[]>([
+  //   { type: "note", title: "test1", body: "test" },
+  //   { type: "task", title: "test1", body: "test" },
+  //   {
+  //     type: "video",
+  //     title: "test2",
+  //     body: "https://www.youtube.com/embed/28-1zR6Xaek",
+  //   },
+  //   {
+  //     type: "image",
+  //     title: "IMAGE",
+  //     body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
+  //   },
+  //   {
+  //     type: "image",
+  //     title: "IMAGE",
+  //     body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
+  //   },
+  // ]);
+
+  const card = useSelector((state: RootState) => state.card.data);
+  const dispatch = useDispatch(); // 디스패치 함수를 가져옵니다
 
   return (
     <ThemeProvider theme={theme}>
@@ -116,24 +111,32 @@ function App() {
             {card.map((value, index) =>
               value.type === "video" ? (
                 <VideoCard
+                  no={value.no}
                   title={value.title}
                   url={value.body}
                   key={index}
                 ></VideoCard>
               ) : value.type === "image" ? (
                 <ImageCard
+                  no={value.no}
                   title={value.title}
                   url={value.body}
                   key={index}
                 ></ImageCard>
               ) : value.type === "note" ? (
                 <NoteCard
+                  no={value.no}
                   title={value.title}
                   body={value.body}
                   key={index}
                 ></NoteCard>
               ) : (
-                <div>{value.body}</div>
+                <TaskCard
+                  no={value.no}
+                  title={value.title}
+                  body={value.body}
+                  key={index}
+                ></TaskCard>
               )
             )}
           </Section>

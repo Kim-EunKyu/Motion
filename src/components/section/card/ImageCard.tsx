@@ -2,8 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { removeCard } from "store/modules/card";
 
 type Image = {
+  no: number;
   title: string;
   url: string;
 };
@@ -46,7 +49,12 @@ const Title = styled.div`
   padding: 8px 6px;
 `;
 
-const ImageCard: React.FC<Image> = ({ title, url }) => {
+const ImageCard: React.FC<Image> = ({ no, title, url }) => {
+  const dispatch = useDispatch();
+  const onClickRemoveCard = () => {
+    dispatch(removeCard(no));
+  };
+
   return (
     <ImageCardBlock>
       <Body>
@@ -54,7 +62,7 @@ const ImageCard: React.FC<Image> = ({ title, url }) => {
         <Title>{title}</Title>
       </Body>
       <Right>
-        <RemoveBtn>
+        <RemoveBtn onClick={onClickRemoveCard}>
           <FontAwesomeIcon icon={faTimes} />
         </RemoveBtn>
       </Right>
@@ -62,4 +70,4 @@ const ImageCard: React.FC<Image> = ({ title, url }) => {
   );
 };
 
-export default ImageCard;
+export default React.memo(ImageCard);
