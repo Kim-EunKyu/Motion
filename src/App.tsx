@@ -71,28 +71,7 @@ const Footer = styled.footer`
 `;
 
 function App() {
-  // const [card, setCard] = useState<Card[]>([
-  //   { type: "note", title: "test1", body: "test" },
-  //   { type: "task", title: "test1", body: "test" },
-  //   {
-  //     type: "video",
-  //     title: "test2",
-  //     body: "https://www.youtube.com/embed/28-1zR6Xaek",
-  //   },
-  //   {
-  //     type: "image",
-  //     title: "IMAGE",
-  //     body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
-  //   },
-  //   {
-  //     type: "image",
-  //     title: "IMAGE",
-  //     body: "http://placehold.it/400x200/efa/aae&text=placehold.it",
-  //   },
-  // ]);
-
   const card = useSelector((state: RootState) => state.card.data);
-  const dispatch = useDispatch(); // 디스패치 함수를 가져옵니다
 
   return (
     <ThemeProvider theme={theme}>

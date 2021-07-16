@@ -21,7 +21,7 @@ export interface ICardState {
   data: Card[];
 }
 
-type CardPayload = ReturnType<typeof addCard>;
+// type CardPayload = ReturnType<typeof addCard>;
 
 const initialState: ICardState = {
   no: 6,
@@ -51,12 +51,14 @@ const initialState: ICardState = {
 
 export default handleActions<ICardState, any>(
   {
-    [ADD_CARD]: (state, action) => ({
+    [ADD_CARD]: (state, { payload: { type, title, body } }) => ({
       ...state,
+      data: state.data.concat({ no: state.no, type, title, body }),
+      no: state.no + 1,
     }),
     [REMOVE_CARD]: (state, { payload: no }) => ({
       ...state,
-      data: state.data.filter((card, index) => card.no !== no),
+      data: state.data.filter((card) => card.no !== no),
     }),
   },
   initialState
