@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import "./App.css";
 import bgImg from "./img/motion_background.png";
 import styled, { ThemeProvider } from "styled-components";
@@ -8,8 +8,9 @@ import VideoCard from "components/section/card/VideoCard";
 import ImageCard from "components/section/card/ImageCard";
 import NoteCard from "components/section/card/NoteCard";
 import TaskCard from "components/section/card/TaskCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "store/modules";
+import { Task } from "store/modules/card";
 
 const AppBG = styled.div`
   position: absolute;
@@ -52,6 +53,22 @@ const Section = styled.section`
   margin: 0 auto;
   overflow: auto;
 
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #adb1b6;
+
+    &:hover {
+      background-color: #848a91;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
   @media screen and (max-width: 768px) {
     width: 100%;
   }
@@ -92,28 +109,28 @@ function App() {
                 <VideoCard
                   no={value.no}
                   title={value.title}
-                  url={value.body}
+                  url={value.body as string}
                   key={index}
                 ></VideoCard>
               ) : value.type === "image" ? (
                 <ImageCard
                   no={value.no}
                   title={value.title}
-                  url={value.body}
+                  url={value.body as string}
                   key={index}
                 ></ImageCard>
               ) : value.type === "note" ? (
                 <NoteCard
                   no={value.no}
                   title={value.title}
-                  body={value.body}
+                  body={value.body as string}
                   key={index}
                 ></NoteCard>
               ) : (
                 <TaskCard
                   no={value.no}
                   title={value.title}
-                  body={value.body}
+                  body={value.body as Task[]}
                   key={index}
                 ></TaskCard>
               )

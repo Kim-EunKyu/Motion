@@ -49,7 +49,7 @@ const Title = styled.div`
   padding: 8px 6px;
 `;
 
-const ImageCard: React.FC<Image> = ({ no, title, url }) => {
+const ImageCard = ({ no, title, url }: Image) => {
   const dispatch = useDispatch();
   const onClickRemoveCard = () => {
     dispatch(removeCard(no));

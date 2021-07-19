@@ -1,14 +1,14 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { removeCard } from "store/modules/card";
+import { changeChecked, removeCard, Task } from "store/modules/card";
 
-type Task = {
+type TaskType = {
   no: number;
   title: string;
-  body: string;
+  body: Task[];
 };
 
 const TaskCardBlock = styled.div`
@@ -32,8 +32,29 @@ const Title = styled.h2`
 `;
 
 const TaskBlock = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+`;
+
+type TaskInfo = {
+  isdone: boolean;
+};
+
+const CheckBox = styled.input``;
+
+const Todo = styled.div<TaskInfo>`
   color: white;
   padding: 4px 8px;
+
+  ${(props) =>
+    props.isdone
+      ? css`
+          text-decoration: line-through;
+        `
+      : css`
+          text-decoration: none;
+        `}
 `;
 
 const Right = styled.div`
@@ -51,17 +72,30 @@ const RemoveBtn = styled.button`
   cursor: pointer;
 `;
 
-const TaskCard: React.FC<Task> = ({ no, title, body }) => {
+const TaskCard = ({ no, title, body }: TaskType) => {
   const dispatch = useDispatch();
   const onClickRemoveCard = () => {
     dispatch(removeCard(no));
+  };
+
+  const onClickChecked = (index: number) => {
+    dispatch(changeChecked({ no, index }));
   };
 
   return (
     <TaskCardBlock>
       <Body>
         <Title>{title}</Title>
-        <TaskBlock>{body}</TaskBlock>
+        {body.map((todoList, index) => (
+          <TaskBlock key={index}>
+            <CheckBox
+              type="checkbox"
+              checked={todoList.isdone}
+              onClick={() => onClickChecked(index)}
+            />
+            <Todo isdone={todoList.isdone}>{todoList.todo}</Todo>
+          </TaskBlock>
+        ))}
       </Body>
       <Right>
         <RemoveBtn onClick={onClickRemoveCard}>
@@ -72,4 +106,4 @@ const TaskCard: React.FC<Task> = ({ no, title, body }) => {
   );
 };
 
-export default React.memo(TaskCard);
+export default TaskCard;
